@@ -12,4 +12,4 @@
   - Prisma (Postgres + SQLite).
   - Dockerized, CI/CD, tests, documentation.
   - Commit-by-commit like a real team.
-Scope is large but sane. We’ll design it as a serious product from day 1.   
+Scope is large but sane. We’ll design it as a serious product from day 1.
