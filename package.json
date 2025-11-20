@@ -1,0 +1,39 @@
+{
+  "name": "erp-saas",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.22.0",
+  "scripts": {
+    "dev:api": "pnpm --filter @sme-erp/api dev",
+    "build:api": "pnpm --filter @sme-erp/api build"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "prisma": "^6.19.0"
+  },
+  "pnpm": {
+    "packages": {
+      "@sme-erp/db": {
+        "dependencies": {
+          "@prisma/client": "^6.19.0",
+          "prisma": "^6.19.0"
+        }
+      }
+    },
+    "overrides": {
+      "@prisma/client": "^6.19.0",
+      "prisma": "^6.19.0"
+    },
+    "patchedDependencies": {},
+    "packageExtensions": {
+      "@prisma/client": {
+        "dependencies": {
+          "prisma": "^6.19.0"
+        }
+      }
+    }
+  }
+}

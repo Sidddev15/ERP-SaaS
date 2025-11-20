@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "baseUrl": "src",
+    "paths": {
+      "@sme-erp/db": ["../../packages/db/src/index.ts"],
+      "@sme-erp/db/*": ["../../packages/db/src/*"]
+    }
+  },
+  "include": ["src"]
+}

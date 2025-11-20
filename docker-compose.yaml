@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sme-erp-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sme_erp
+    ports:
+      - "5432:5432"
+    volumes:
+      - sme-erp-db-data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    container_name: sme-erp-api
+    env_file:
+      - .env.docker
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  sme-erp-db-data:
