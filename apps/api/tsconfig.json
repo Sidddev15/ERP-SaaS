@@ -9,5 +9,5 @@
       "@sme-erp/db/*": ["../../packages/db/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "types"]
 }

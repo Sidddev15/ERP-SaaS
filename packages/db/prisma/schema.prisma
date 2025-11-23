@@ -14,4 +14,17 @@ model Tenant {
   code        String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  users       User[]
+}
+
+model User {
+  id                              String @id @default(uuid())
+  tenantId                        String
+  tenant                          Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  fullName                        String
+  email                           String @unique
+  password                        String
+  role                            String @default("user") // admin|user|manager etc.
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @updatedAt
 }
