@@ -3,26 +3,40 @@ import { prisma } from '@sme-erp/db';
 
 export default fp(async (app) => {
     app.addHook('preHandler', async (req, reply) => {
-        //temporary tenant solution will be replaceed by JWT later
-        const tenantId = req.headers['x-tenant-id'];
+        // PUBLIC ROUTES (no auth, no tenant required)
+        const publicRoutes = [
+            '/auth/login',
+            '/auth/register',
+            '/login',
+            '/register',
+            '/tenant',
+            '/health'
+        ];
+        const routePath = req.routeOptions?.url || req.raw.url || '';
 
-        if (!tenantId) {
-            //Allow public routes
-            if (req.routeOptions.url?.startsWith('/tenant') || req.routeOptions.url?.startsWith('/health')) return;
-            return reply.code(400).send({ message: 'x-tenant-id header missing' });
-        }
-
-        // Verify if tenant exists (cached later)
-        const tenant = await prisma.tenant.findUnique({
-            where: { id: String(tenantId) }
-        });
-
-        if (!tenant) {
-            reply.code(400).send({ error: 'Tenant not found' });
+        if (publicRoutes.some((p) => routePath.startsWith(p))) {
             return;
         }
 
-        // Attaching tenant to req context
+        try {
+            await req.jwtVerify();
+        } catch (err) {
+            return reply.code(401).send({ error: 'Unauthorized', details: err });
+        }
+
+        const tenantId = req.user.tenantId;
+        if (!tenantId) {
+            return reply.code(400).send({ error: 'Invalid token: no tenantId found' });
+        }
+
+        const tenant = await prisma.tenant.findUnique({
+            where: { id: tenantId }
+        });
+
+        if (!tenant) {
+            return reply.code(401).send({ error: 'Tenant not found or unauthorized' });
+        }
+
         req.tenant = tenant;
-    })
-})
+    });
+});
